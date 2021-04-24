@@ -36,7 +36,7 @@ class AssetsViewSet(viewsets.ModelViewSet):
     serializer_class = AssetsSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'], url_name='operation')
     def operation(self, request, pk=None):
         get_object_or_404(self.queryset, pk=pk)
         request.data.update({"user": request.user.id, "ip": self._get_ip(request)})
@@ -46,9 +46,6 @@ class AssetsViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def create(self, request):
-        return Response(status=status.HTTP_403_FORBIDDEN)
 
     def update(self, request, pk=None):
         return Response(status=status.HTTP_403_FORBIDDEN)
